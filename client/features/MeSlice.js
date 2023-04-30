@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchMe = createAsyncThunk('fetch/Me', async()=>{
-  let token= window.localStorage.getItem('token')
+export const fetchMe = createAsyncThunk('fetch/Me', async(token)=>{
   const {data} = await axios.get('https://api.spotify.com/v1/me',{
   headers:{
     Authorization: `Bearer ${token}`,
@@ -15,7 +14,7 @@ const MeSlice = createSlice({
   name: 'Me',
   initialState:{
     info:{},
-    error:{},
+    error:null,
   },
   reducers:{},
   extraReducers: (builder)=>{

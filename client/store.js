@@ -1,9 +1,11 @@
 import logger from 'redux-logger';
 import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit'
-import MeReduceer from './features/MeSlice'
+import MeReducer from './features/MeSlice'
+import PlaylistReducer from './features/PlaylistSlice';
 const store = configureStore({
   reducer:{
-    Me:MeReduceer,
+    Me:MeReducer,
+    Playlist:PlaylistReducer,
   },
   middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
 });
