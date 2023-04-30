@@ -1,8 +1,16 @@
 *{
   color: whitesmoke;
   background: black;
+  text-align: center;
 }
 body{
   color: whitesmoke;
-  background: black;
+  background: rgb(41, 41, 41);
+}
+image{
+  width: 100v;
+}
+.giphy-embed{
+  width: 100vw;
+  height: 100vh;
 }

@@ -1,10 +1,10 @@
-import dummyReducer from './dummySlice';
-import {configureStore} from '@reduxjs/toolkit'
-
+import logger from 'redux-logger';
+import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit'
+import MeReduceer from './features/MeSlice'
 const store = configureStore({
   reducer:{
-    dummy: dummyReducer,
+    Me:MeReduceer,
   },
+  middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
 });
-
 export default store;
