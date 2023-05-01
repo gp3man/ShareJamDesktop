@@ -1,8 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMe, selectMe } from "../features/MeSlice";
+import { fetchMe, fetchMePlaylists, selectMe } from "../features/MeSlice";
 import { fetchPlaylist, fetchPlaylistTracks, selectPlaylist } from "../features/PlaylistSlice";
+import { Link } from "react-router-dom";
+import SyncPlaylist from "./SyncPlaylist";
+import { fetchMyPlaylist } from "../features/SinglePlaylistSlice";
 const UserProfile = () =>{
   const dispatch = useDispatch()
   const CLIENT_ID='79240ee4dc9a4ec6a3fc193a9d86674c'
@@ -12,10 +15,10 @@ const UserProfile = () =>{
   const User = useSelector(selectMe)
   const [token, setToken] = useState('')
   const [artists, setArtists] = useState([])
-  // const [otherPlaylist, setOtherPlaylist]= useState([])
   const otherPlaylist= useSelector((state)=> state.Playlist.othersList.items)
+  const MyList = useSelector((state)=> state.Me.allMePlaylist)
   const [searchKey, setSearchKey] = useState('')
-  const [searchUserKey, setSearchUserKey] = useState('')
+  const [SearchUserId, setSearchUserID] = useState('')
 
   useEffect(()=>{
     const hash = window.location.hash
@@ -26,6 +29,7 @@ const UserProfile = () =>{
       window.location.hash = ''//gets rid of random chars in url
       window.localStorage.setItem('token', token)
       dispatch(fetchMe(token))
+      dispatch(fetchMePlaylists(token))
     }
     setToken(token)
   },[])
@@ -52,29 +56,38 @@ const searchArtist = async(e)=>{
 }
 const searchUser = (e)=>{
   e.preventDefault()
-  dispatch(fetchPlaylist( token, searchUserKey))
+  dispatch(fetchPlaylist( {token, SearchUserId}))
 }
 const renderArtist=()=>{
   return artists.map(artist=>(
-    <div key={artist.id}>
+    <div id= 'renderedArtists'key={artist.id}>
       <h2>{artist.name}</h2>
       {artist.images.length ? <img width= '300px' height= '300px' src={artist.images[0].url} alt=""/>:<div width= '300px' height= '300px'>No Face no case</div>}
 
     </div>
   ))}
   const renderUserPlaylists=()=>{
-
     return  otherPlaylist.map(Playlist=>(
-      <div key={Playlist.id}>
+    <div id="renderedSearchPlaylist" key={Playlist.id}>
+      <Link to={`/playlist/${Playlist.id}`}>
         {Playlist.images.length ? <img width= '150px' height= '150px' src={Playlist.images[0].url} alt=""/>:<div>No Image To Load</div>}
         <h2>{Playlist.name}</h2>
         <h4>Has {Playlist.tracks.total} track(s)</h4>
+      </Link>
       </div>
     ))}
-
-
-
-
+    const renderMyPlaylists=()=>{
+    return  MyList.map(Playlist=>(
+      <div  id='renderedMyPlaylists' key={Playlist.id}>
+        {Playlist.images.length ? <img width= '150px' height= '150px' src={Playlist.images[0].url} alt=""/>:<div>No Image To Load</div>}
+        <h2>{Playlist.name}</h2>
+        <h4>Has {Playlist.tracks.total} track(s)</h4>
+        <button onClick={()=>
+           dispatch(fetchMyPlaylist({token, Playlist}))}>
+          Make My List
+      </button>
+      </div>
+    ))}
 
 
 
@@ -89,7 +102,7 @@ const renderArtist=()=>{
       {token?
       <form onSubmit={searchArtist}>
         <input type="text" onChange={e => setSearchKey(e.target.value)}/>
-        <button type="submit">search</button>
+        <button type="submit">Search Stars</button>
       </form>
       :<h1>Login For some Magic!</h1>}
 
@@ -101,9 +114,12 @@ const renderArtist=()=>{
       {User.images ? <img src={User.images[0]}/> :null}
       <a>Find Yourself At: {User.href}</a>
 
+      <div id="generate"> <h2>Click The Playlist You Want To Add Music To.</h2> <small>Heres Your Playlist Below:</small>
+      { MyList ? renderMyPlaylists():null}</div>
+
       <div id="searchUserPlaylist">
         <form onSubmit={searchUser}>
-          <input type="text" onChange={e => setSearchUserKey(e.target.value)}/>
+          <input type="text" onChange={e => setSearchUserID(e.target.value)}/>
           <button type="submit">search Users</button>
         </form>
       {otherPlaylist ? renderUserPlaylists():null}
