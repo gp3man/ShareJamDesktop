@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMe, fetchMePlaylists, selectMe } from "../features/MeSlice";
 import { fetchPlaylist, fetchPlaylistTracks, selectPlaylist } from "../features/PlaylistSlice";
 import { Link } from "react-router-dom";
-import SyncPlaylist from "./SyncPlaylist";
 import { fetchMyPlaylist } from "../features/SinglePlaylistSlice";
 const UserProfile = () =>{
   const dispatch = useDispatch()

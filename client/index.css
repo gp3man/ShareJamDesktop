@@ -1,6 +1,6 @@
 *{
   color: whitesmoke;
-  background: black;
+  background: rgb(30, 30, 30);
   text-align: center;
 }
 body{
@@ -13,4 +13,10 @@ image{
 .giphy-embed{
   width: 100vw;
   height: 100vh;
+}
+#generate{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
 }

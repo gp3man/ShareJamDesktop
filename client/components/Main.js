@@ -15,7 +15,6 @@ const Main = () => {
                     <Route path = '/*' element={<UserProfile />}/>
                     <Route path = '/' element={<UserProfile />}/>
                     <Route path = '/playlist'element= {<SyncPlaylist />}/>
-
                 </Routes>
             </div>
         </>
